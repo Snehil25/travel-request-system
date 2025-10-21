@@ -1,0 +1,19 @@
+{
+  "requestId": 1,
+  "employeeId":1,
+  "purpose":"Meeting",
+  "requestDate":"2025-10-05",
+  "approvalStatus":"PENDING",
+  "approvedBy": null,
+  "travelDetails":{
+    "fromCity":"Chandigarh",
+    "toCity":"Mumbai",
+    "departureDate":"2025-10-09",
+    "returnDate":"2025-10-10"
+  },
+  "hotelBooking":{
+    "checkInDate":"2025-10-09",
+    "checkOutDate":"2025-10-10",
+    "preferredAddress":"Mumbai"
+  }
+}

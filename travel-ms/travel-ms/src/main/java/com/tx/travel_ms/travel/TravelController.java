@@ -2,6 +2,7 @@ package com.tx.travel_ms.travel;
 
 import com.tx.travel_ms.travel.dto.RequestDto;
 import com.tx.travel_ms.travel.dto.RequestMapper;
+import com.tx.travel_ms.travel.dto.UpdateRequestDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,18 @@ public class TravelController {
                 .map(RequestMapper::toDto)
                 .toList();
         return ResponseEntity.ok(requestDto);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateRequest(@PathVariable Long id, @RequestBody UpdateRequestDto dto){
+        try {
+            Request updatedRequest=travelService.updateRequest(id, dto);
+            return ResponseEntity.ok(RequestMapper.toDto(updatedRequest));
+        } catch (RuntimeException e){
+            if(e.getMessage().contains("not found")){
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
     @DeleteMapping("/by-employee/{employeeId}")
     public ResponseEntity<Void> deleteRequestByEmployee(@PathVariable Long employeeId){

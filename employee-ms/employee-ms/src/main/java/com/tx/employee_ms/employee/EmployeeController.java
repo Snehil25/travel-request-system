@@ -6,7 +6,13 @@ import com.tx.employee_ms.employee.dto.EmployeeMapper;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -63,5 +69,27 @@ public class EmployeeController {
         }
         employeeService.deleteEmployeeAndRequests(id);
         return ResponseEntity.noContent().build();
+    }
+    @PostMapping("/{id}/document")
+    public ResponseEntity<String> uploadDocument(@PathVariable Long id, @RequestParam("file")MultipartFile file){
+        return employeeRepository.findById(id)
+                .map(employee -> {
+                    if(file.isEmpty()){
+                        return ResponseEntity.badRequest().body(" File is empty");
+                    }
+                    try {
+                        String dir="uploads/";
+                        File directory=new File(dir);
+                        if(!directory.exists()){
+                            directory.mkdir();
+                        }
+                        Path filePath= Paths.get(dir+"employee_"+id+"_"+ file.getOriginalFilename());
+                        Files.copy(file.getInputStream(),filePath, StandardCopyOption.REPLACE_EXISTING);
+                        return ResponseEntity.ok().body(" File uploaded successfully "+filePath.getFileName());
+                    } catch (Exception e) {
+                        return  ResponseEntity.internalServerError().body(" Failed to upload file "+e.getMessage());
+                    }
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }

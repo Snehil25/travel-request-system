@@ -1,6 +1,7 @@
 package com.tx.travel_ms.travel;
 
 import com.tx.travel_ms.travel.dto.RequestStatus;
+import com.tx.travel_ms.travel.dto.UpdateRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +51,35 @@ public class TravelService {
     }
     public List<Request> getRequestByEmployee(Long employeeId){
         return requestRepository.findByEmployeeId(employeeId);
+    }
+    public Request updateRequest(Long requestId, UpdateRequestDto dto){
+        Request existingRequest=requestRepository.findById(requestId)
+                .orElseThrow(()-> new RuntimeException("Request not found with ID: "+requestId));
+        existingRequest.setPurpose(dto.getPurpose());
+        if(dto.getTravelDetails()!=null){
+            TravelDetails details=existingRequest.getTravelDetails();
+            if(details==null){
+                details = new TravelDetails();
+                details.setRequest(existingRequest);
+                existingRequest.setTravelDetails(details);
+            }
+            details.setFromCity(dto.getTravelDetails().getFromCity());
+            details.setToCity(dto.getTravelDetails().getToCity());
+            details.setDepartureDate(dto.getTravelDetails().getDepartureDate());
+            details.setReturnDate(dto.getTravelDetails().getReturnDate());
+        }
+        if(dto.getHotelBooking()!=null){
+            HotelBooking booking=existingRequest.getHotelBooking();
+            if(booking==null){
+                booking = new HotelBooking();
+                booking.setRequest(existingRequest);
+                existingRequest.setHotelBooking(booking);
+            }
+            booking.setCheckInDate(dto.getHotelBooking().getCheckInDate());
+            booking.setCheckOutDate(dto.getHotelBooking().getCheckOutDate());
+            booking.setPreferredAddress(dto.getHotelBooking().getPreferredAddress());
+        }
+        return requestRepository.save(existingRequest);
     }
     public void deleteRequestsByEmployeeId(Long employeeId){
         requestRepository.deleteAllByEmployeeId(employeeId);

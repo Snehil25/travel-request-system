@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+    <listeners>
+        <listener class-name="com.tx.api.test.automate.listeners.ApiAutomationListeners"/>
+        <listener class-name="com.tx.api.test.automate.listeners.ExtentReportListener"/>
+    </listeners>
+    <parameter name="data-file-path" value="src/test/data/TestData(File).xlsx"/>
+    <parameter name="config-file-path" value="src/test/resources/config.properties"/>
+    <test thread-count="5" name="Test">
+        <classes>
+            <class name="com.tx.api.test.automate.ApiAutomationTest"/>
+        </classes>
+    </test>
+</suite>

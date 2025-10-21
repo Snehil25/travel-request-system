@@ -1,0 +1,14 @@
+{
+  "employee_id":1,
+  "firstName": "Snehil",
+  "middleName": "",
+  "lastName": "Sharma",
+  "department": "Delivery",
+  "position": "Trainee",
+  "level": "1",
+  "contact": "1256",
+  "emergencyContact": "580",
+  "projectName": "Jdbc",
+  "email": "snehilsharma@gmail.com",
+  "reportingManagerId": null
+}
